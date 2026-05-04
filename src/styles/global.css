@@ -1,0 +1,7 @@
+.box4custom.box:hover {
+  background-color: #6fc97e;
+  transition: background-color 0.3s;
+}
+ .box {
+   /* To learn more about CSS classes, visit https://wix.to/bnrepmb. Write your CSS here: */
+} 
