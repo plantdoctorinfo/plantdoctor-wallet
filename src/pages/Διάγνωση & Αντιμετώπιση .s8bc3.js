@@ -10,6 +10,7 @@ $w.onReady(function () {
             const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
 
             const imageUrl = uploadedFiles[0]?.fileUrl;
+            console.log("IMAGE URL:", imageUrl);
 
               if (!imageUrl) {
               throw new Error("Δεν βρέθηκε φωτογραφία");
