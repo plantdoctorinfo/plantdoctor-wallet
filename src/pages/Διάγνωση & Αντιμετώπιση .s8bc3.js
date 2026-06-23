@@ -9,10 +9,10 @@ $w.onReady(function () {
         try {
            const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
 
-         $w("#resultText").text =
-        Object.keys(uploadedFiles[0]).join("\n");
+          $w("#resultText").text =
+         JSON.stringify(uploadedFiles[0], null, 2);
 
-          return;
+         return;
             
                 
             $w('#resultText').text =
