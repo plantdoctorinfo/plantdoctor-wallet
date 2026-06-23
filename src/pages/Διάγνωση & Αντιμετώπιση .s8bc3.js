@@ -7,23 +7,12 @@ $w.onReady(function () {
         const symptoms = $w('#symptomInput').value;
 
         try {
-            const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
+           const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
 
-           const wixImageUrl = uploadedFiles[0]?.fileUrl;
+         $w("#resultText").text =
+        Object.keys(uploadedFiles[0]).join("\n");
 
-           if (!wixImageUrl) {
-            throw new Error("Δεν βρέθηκε φωτογραφία");
-           }
-
-          const imageUrl = "https://static.wixstatic.com/media/" +
-            wixImageUrl
-           .replace("wix:image://v1/", "")
-            .split("/")[0];
-
-           console.log("WIX URL:", wixImageUrl);
-         $w('#resultText').text = wixImageUrl;
           return;
-         const result = await testDiagnosis(symptoms, imageUrl);
             
                 
             $w('#resultText').text =
