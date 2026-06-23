@@ -9,14 +9,23 @@ $w.onReady(function () {
         try {
             const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
 
-            const imageUrl = uploadedFiles[0]?.fileUrl;
-            console.log("IMAGE URL:", imageUrl);
+           const wixImageUrl = uploadedFiles[0]?.fileUrl;
 
-              if (!imageUrl) {
-              throw new Error("Δεν βρέθηκε φωτογραφία");
-              }
+           if (!wixImageUrl) {
+            throw new Error("Δεν βρέθηκε φωτογραφία");
+           }
 
-                const result = await testDiagnosis(symptoms, imageUrl);
+          const imageUrl = "https://static.wixstatic.com/media/" +
+            wixImageUrl
+           .replace("wix:image://v1/", "")
+            .split("/")[0];
+
+           console.log("WIX URL:", wixImageUrl);
+         $w('#resultText').text = wixImageUrl;
+          return;
+         const result = await testDiagnosis(symptoms, imageUrl);
+            
+                
             $w('#resultText').text =
                 result + "\n\nΠεριγραφή: " + symptoms;
             } catch (error) {
