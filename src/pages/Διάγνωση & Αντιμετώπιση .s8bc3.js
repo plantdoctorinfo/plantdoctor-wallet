@@ -10,10 +10,10 @@ $w.onReady(function () {
            const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
 
           $w("#resultText").text =
-         JSON.stringify(uploadedFiles[0], null, 2);
+          uploadedFiles[0].fileUrl;
 
-         return;
-            
+          return;
+            console.log("FILE OBJECT:", uploadedFiles[0]);
                 
             $w('#resultText').text =
                 result + "\n\nΠεριγραφή: " + symptoms;
