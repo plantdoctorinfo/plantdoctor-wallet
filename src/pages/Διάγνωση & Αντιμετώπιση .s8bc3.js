@@ -18,9 +18,10 @@ $w.onReady(function () {
                 const result = await testDiagnosis(symptoms, imageUrl);
             $w('#resultText').text =
                 result + "\n\nΠεριγραφή: " + symptoms;
-        } catch (error) {
-            console.error(error);
-            $w('#resultText').text = "Σφάλμα επικοινωνίας με το AI.";
-        }
+            } catch (error) {
+               console.error(error);
+               $w('#resultText').text =
+             "Σφάλμα: " + (error.message || JSON.stringify(error));
+             }
     });
 });
