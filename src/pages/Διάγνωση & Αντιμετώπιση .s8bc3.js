@@ -7,8 +7,10 @@ $w.onReady(function () {
         const symptoms = $w('#symptomInput').value;
 
         try {
-            const result = await testDiagnosis(symptoms);
+            const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
+            const imageUrl = uploadedFiles[0].fileUrl;
 
+            const result = await testDiagnosis(symptoms, imageUrl);
             $w('#resultText').text =
                 result + "\n\nΠεριγραφή: " + symptoms;
         } catch (error) {

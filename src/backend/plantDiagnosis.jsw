@@ -1,7 +1,7 @@
 import { getSecret } from 'wix-secrets-backend';
 import { fetch } from 'wix-fetch';
 
-export async function testDiagnosis(symptoms) {
+export async function testDiagnosis(symptoms, imageUrl) {
 
     const apiKey = await getSecret("OPENAI_API_KEY");
 
@@ -23,9 +23,20 @@ export async function testDiagnosis(symptoms) {
                           "Μπορώ να βοηθήσω μόνο με θέματα φυτών, ασθενειών και φροντίδας φυτών."`
                     },
                     {
-                        role: "user",
-                        content: symptoms
-                    }
+                      role: "user",
+                      content: [
+                      {
+                     type: "text",
+                     text: symptoms || "Ανάλυσε τη φωτογραφία του φυτού."
+                     },
+                     {
+                     type: "image_url",
+                     image_url: {
+                     url: imageUrl
+                     }
+                     }
+                     ]
+                     }
                 ],
                 temperature: 0.3
             })
