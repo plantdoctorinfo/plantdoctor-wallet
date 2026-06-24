@@ -1,57 +1,39 @@
-import { getSecret } from 'wix-secrets-backend';
-import { fetch } from 'wix-fetch';
+import { testDiagnosis } from 'backend/plantDiagnosis';
 
-export async function testDiagnosis(symptoms, imageUrl) {
+$w.onReady(function () {
 
-    const apiKey = await getSecret("OPENAI_API_KEY");
+    $w("#diagnoseButton").onClick(async () => {
 
-    const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: "gpt-4.1-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: `Είσαι το PlantDoctor AI και απαντάς αποκλειστικά για φυτά, ασθένειες φυτών, εχθρούς, θρέψη, πότισμα, έδαφος και καλλιεργητικές φροντίδες.
-                          Αν η ερώτηση δεν αφορά φυτά ή κηπουρική, απάντησε μόνο:
-                          "Μπορώ να βοηθήσω μόνο με θέματα φυτών, ασθενειών και φροντίδας φυτών."`
-                    },
-                    {
-                      role: "user",
-                      content: [
-                      {
-                     type: "text",
-                     text: symptoms || "Ανάλυσε τη φωτογραφία του φυτού."
-                     },
-                     {
-                     type: "image_url",
-                     image_url: {
-                     url: imageUrl
-                     }
-                     }
-                     ]
-                     }
-                ],
-                temperature: 0.3
-            })
+        $w("#resultText").text = "Γίνεται διάγνωση...";
+
+        const symptoms = $w("#symptomInput").value;
+
+        try {
+
+            const uploadedFiles = await $w("#uploadPlantImage").uploadFiles();
+
+            if (!uploadedFiles || !uploadedFiles[0]) {
+                throw new Error("Δεν βρέθηκε φωτογραφία");
+            }
+
+            const imageUrl =
+                "https://static.wixstatic.com/media/" +
+                uploadedFiles[0].fileName;
+
+            const result = await testDiagnosis(symptoms, imageUrl);
+
+            $w("#resultText").text =
+                result + "\n\nΠεριγραφή: " + symptoms;
+
+        } catch (error) {
+
+            console.error(error);
+
+            $w("#resultText").text =
+                "Σφάλμα: " +
+                (error.message || JSON.stringify(error));
         }
-    );
 
-   const data = await response.json();
+    });
 
-  if (!response.ok) {
-  throw new Error(data.error?.message || JSON.stringify(data));
-  }
-
-  if (!data.choices || !data.choices[0]) {
-  throw new Error("Δεν επέστρεψε απάντηση το AI: " + JSON.stringify(data));
-  }
-
-  return data.choices[0].message.content;  
-}
+});
